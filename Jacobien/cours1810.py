@@ -25,16 +25,16 @@ def Newton(x, y, z, l1, l2, l3, mxIter):
     theta = [1, 1, 1]
     iter = 0
     while iter < mxIter:
+
         J = Jacob(theta[0], theta[1], theta[2], l1, l2, l3)
-
         A = np.linalg.inv(J)
-        print("A=", A)
         B = np.array([[x], [y], [z]]) - direct(theta[0], theta[1], theta[2], l1, l2, l3)
-        print("B=",B)
-        print("produit=",
-        theta = theta + np.dot(A, B)
-        print(theta)
+        theta = theta + np.transpose(np.dot(A, B))[0]
         iter += 1
+        print('erreur =',B)
 
+    print( "La solution finale de theta est :",theta)
+
+    return (theta)
 
 Newton(0.5, 0.1, 0.6, 0.5, 0.5, 0.5, 5)
