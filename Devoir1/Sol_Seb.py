@@ -64,8 +64,8 @@ def inverseKinematics(l1, l2, l3, x, y, z):
     else:
         r[0].append(np.arctan2(y, x))
         r[1].append(np.arctan2(y, x))
-        r[2].append(np.arctan2(y, x) + np.pi)
-        r[3].append(np.arctan2(y, x) + np.pi)
+        r[2].append(np.arctan2(y, x) + pi)
+        r[3].append(np.arctan2(y, x) + pi)
 
     # On va ensuite calculer les theta2
     for i in range(len(r)):
@@ -73,6 +73,7 @@ def inverseKinematics(l1, l2, l3, x, y, z):
             eps = 1
         else:
             eps = -1
+
         d = (x ** 2 + y ** 2 + (z - l1) ** 2 - l2 ** 2 - l3 ** 2) / (2 * l2 * l3)
         t3 = np.arctan2(eps * np.sqrt(1 - d ** 2), d)
         t2 = np.arctan2(z - l1, np.sqrt(x ** 2 + y ** 2)) - np.arctan2(l3 * np.sin(t3), l2 + l3 * np.cos(t3))
@@ -90,13 +91,13 @@ def inverseKinematics(l1, l2, l3, x, y, z):
 t1 = np.radians(30)
 t2 = np.radians(40)
 t3 = np.radians(50)
-l1 = 0.5
-l2 = 0.5
-l3 = 0.5
+l1 = 100
+l2 = 400
+l3 = 300
 
 P, X, Y, Z = DirectKinematics(l1, l2, l3, t1, t2, t3)
 print(P)
-thetas = inverseKinematics(l1, l2, l3, 0.5, 0.1, 0.6)
+thetas = inverseKinematics(l1, l2, l3, P[0], P[1], P[2])
 
 thetas.append([t1, t2, t3])
 
@@ -124,7 +125,6 @@ plt.legend()
 
 for i in range(len(thetas)):
     for j in range(len(thetas[i])):
+        thetas[i][j] = round(degrees(thetas[i][j]), 1)
 
-        thetas[i][j] = round(np.degrees(thetas[i][j]), 2)
-    print("theta"+str(i),thetas[i])
-#print(thetas[:4])
+print(thetas[:4])
