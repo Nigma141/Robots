@@ -21,20 +21,22 @@ def Jacob(theta1, theta2, theta3, l1=1, l2=2, l3=3):
     return (M)
 
 
-def Newton(x, y, z, l1, l2, l3, mxIter):
+def Newton(x, y, z, l1, l2, l3, mxIter,eps):
     theta = [1, 1, 1]
     iter = 0
-    while iter < mxIter:
-
+    err=10*eps
+    while iter < mxIter or err>eps:
         J = Jacob(theta[0], theta[1], theta[2], l1, l2, l3)
         A = np.linalg.inv(J)
         B = np.array([[x], [y], [z]]) - direct(theta[0], theta[1], theta[2], l1, l2, l3)
         theta = theta + np.transpose(np.dot(A, B))[0]
         iter += 1
-        print('erreur =',B)
+        err = np.linalg.norm(B)
+        print('erreur =', B)
 
-    print( "La solution finale de theta est :",theta)
+    print("La solution finale de theta est :", theta)
 
     return (theta)
 
-Newton(0.5, 0.1, 0.6, 0.5, 0.5, 0.5, 5)
+
+Newton(0.5, 0.1, 0.6, 0.5, 0.5, 0.5, 100,0.01)
