@@ -62,30 +62,51 @@ ax2.plot_surface(
     x, y, z, rstride=1, cstride=1, color='c', alpha=0.6, linewidth=0)
 
 ## definition du repere à partir des 3 points
-P1 = np.array([1056.877, 602.023, -167.401])
-P2 = np.array([1048.896, 701.938, -167.892])
-P3 = np.array([1156.740, 609.933, -167.633])
-Xr = [P1[0], P2[0], P3[0]]
-Yr = [P1[1], P2[1], P3[1]]
-Zr = [P1[2], P2[2], P3[2]]
+P11 = np.array([1056.877, 602.023, -167.401])
+P12 = np.array([1048.896, 701.938, -167.892])
+P13 = np.array([1156.740, 609.933, -167.633])
+Xr = [P11[0], P12[0], P13[0]]
+Yr = [P11[1], P12[1], P13[1]]
+Zr = [P11[2], P12[2], P13[2]]
 
 fig3 = plt.figure()
 ax3 = plt.axes(projection='3d')
 ax3.scatter3D(Xr, Yr, Zr, color='r');
 
 # origine = P1
-Vx = (P2 - P1)/np.linalg.norm(P2 - P1)
-Vy = (P3 - P1)/np.linalg.norm(P3 - P1)
-print(np.arccos(np.dot(Vx, Vy)) / np.pi * 180)
+def Repere(P11,P12,P13):
+    Vy = (P12 - P11)/np.linalg.norm(P12 - P11)
+    Vx = (P13 - P11)/np.linalg.norm(P13 - P11)
+    print(np.arccos(np.dot(Vx, Vy)) / np.pi * 180)
 
-Vz=np.cross(Vx,Vy)
+    Vz=np.cross(Vx,Vy)
 
-M=np.transpose([Vx,Vy,Vz])
-print(M)
+    M01=np.transpose([Vx,Vy,Vz])
 
-T=np.zeros((4,4))
-T[3,3]=1
-T[0:3,0:3]=M
-T[0:3,3]=np.transpose(P1)
 
-print('la matrice de translation est :',T)
+    T01=np.zeros((4,4))
+    T01[3,3]=1
+    T01[0:3,0:3]=M01
+    T01[0:3,3]=np.transpose(P11)
+
+    #print('la matrice de translation est :',T01)
+    return (T01)
+
+
+
+T01=Repere(P11,P12,P13)
+
+
+
+P21 = np.array([1433.739, 67.17, -139.34])
+P22 = np.array([1441.64, -31.23,-139.07])
+P23 = np.array([1333.926, 57.97, -140.29])
+
+T02=Repere(P21,P22,P23)
+
+
+
+T12=np.dot(T01,np.linalg.inv(T02))
+
+
+print(T12)
